@@ -1,3 +1,4 @@
+from ast import Try
 import random
 from datetime import timedelta, date
 import tkinter as tk
@@ -41,11 +42,17 @@ class ResultSaver():
             self.session = 1
             self.index = 0
         else:
-            with open(self.filename, 'r') as file:
-                last_line = file.readlines()[-1]
-            values = last_line.split(sep=', ')
-            self.session = int(values[0])+1
-            self.index = int(values[1])+1
+            try:
+                # creates an error if programm is opend on the secound time,
+                # when it was closed on the first time without a first guess.
+                with open(self.filename, 'r') as file:
+                    last_line = file.readlines()[-1]
+                values = last_line.split(sep=', ')
+                self.session = int(values[0])+1
+                self.index = int(values[1])+1
+            except ValueError:
+                self.session = 1
+                self.index = 0
 
     def add_result(self, date, day_of_week, guess, time):
         with open(self.filename, 'a') as file:
