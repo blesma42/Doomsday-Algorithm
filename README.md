@@ -31,8 +31,8 @@ Doomsday of August is the 8th -> 8/8 is a Tuesday
 20th August 2017 was a Sunday.  
 ___
 
-If the day for any of the doomsdays is known, all other doomsday for this year are known as well and can be used to calulate the day for any other date of the year. 
-To calculate the doomsday for a year, an anchor day for the century can be used. 
+If the day for any of the doomsdays is known, all other doomsday for this year are known as well and can be used to calulate the day for any other date of the year.  
+To calculate the doomsday for a year, an anchor day for the century can be used.  
 
 |Sunday|Monday|Tuesday|Wednesday|Thursday|Friday|Saturday|
 |-|-|-|-|-|-|-|
@@ -43,7 +43,7 @@ The anchor days are repeated in a 400 year cycle (as the entire gregorian calend
 Now you can calculate the difference between the year and century anchor year in years. Multiply by five, divide by fourh, and round down. Divide by seven and the remainer is the shift of days.
 
 ___
-**Example:** doomsday of 1925:  
+**Example:** Doomsday of 1925:  
 Century: 1900  
 1925 - 1900 = 25  
 25*5/4 = 125/4 = 31.25 -> down rounded 31  
@@ -56,6 +56,7 @@ An additional important fact is, that years which are divisible by 100, but not 
 ### Additional Examples
 
 ___
+
 #### 24.01.2224
 
 Doomsday of 2200: Friday  
@@ -72,6 +73,7 @@ Doomsday of 2200: Friday
 --> The 24th January 2224 is a Saturday.  
 
 ___
+
 #### 21.12.1726
 
 Doomsday of 1700: Monday  
@@ -91,6 +93,14 @@ ___
 ## What the programm does
 
 The rogramm provides a GUI for easy training. It creates a random date, and indicates, if the selection was correct with a simple green-red color code.
-It also creates a file (if not existing) where it stores the session number, number of guess, the correct answer, the guess, and the time (duration).
+It also creates a file (if not existing) where it stores the number of guess, session number, the correct answer, the guess, and the time (duration).
 
 ![GUI](GUI.png)
+
+## Project Files
+
+|File Name|Description|
+|-|-|
+|[README.md](README.md)|Project Description|
+|[day_guesser.py](day_guesser.py)|Programm to train the Doomsday Algorithm|
+|[GUI.png](GUI.png)|Image of the GUI|
