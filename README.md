@@ -95,7 +95,7 @@ ___
 The rogramm provides a GUI for easy training. It creates a random date, and indicates, if the selection was correct with a simple green-red color code.
 It also creates a file (if not existing) where it stores the number of guess, session number, the correct answer, the guess, and the time (duration).
 
-![GUI](GUI.png)
+![GUI](GUI.PNG)
 
 ## Project Files
 
@@ -103,4 +103,4 @@ It also creates a file (if not existing) where it stores the number of guess, se
 |-|-|
 |[README.md](README.md)|Project Description|
 |[day_guesser.py](day_guesser.py)|Programm to train the Doomsday Algorithm|
-|[GUI.png](GUI.png)|Image of the GUI|
+|[GUI.PNG](GUI.png)|Image of the GUI|
