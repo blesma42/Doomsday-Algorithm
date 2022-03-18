@@ -61,7 +61,10 @@ class ResultSaver():
         self.index += 1
 
 class ShowText():
-    def __init__(self, root, string1, string2, fontsize, pos_x, pos_y): 
+    '''Creates two text boxes beneath each other. The lower one shows static text, the upper one dynamic text.'''
+  
+    def __init__(self, root, string1, string2, fontsize, pos_x, pos_y):
+        # testbox with static text 
         self.text = tk.Label(root, text=string1)
         self.text.config(font=("Arial", fontsize-6))
         self.text.place(relx=pos_x, y=pos_y+20, anchor=tk.CENTER)
@@ -70,7 +73,7 @@ class ShowText():
         self.dynamic_text_var = tk.StringVar()
         self.dynamic_text_var.set(string2)
 
-        # textbox with labaling for date
+        # textbox with dynamic text
         self.dynamic_text = tk.Label(root, textvariable=self.dynamic_text_var)
         self.dynamic_text.config(font=("Arial", fontsize))
         self.dynamic_text.place(relx=pos_x, y=pos_y, anchor=tk.CENTER)
@@ -80,10 +83,11 @@ class ShowText():
 
 class DoomsdayAlgorithm():
     def __init__(self):
-        # window settings
+        # window size
         x_size = 700
         y_size = 350
 
+        # general settings of the window
         self.root = tk.Tk()
         self.root.geometry(str(x_size)+'x'+str(y_size))
         self.root.resizable(False, False)
@@ -98,16 +102,16 @@ class DoomsdayAlgorithm():
         # saves the results
         self.saver = ResultSaver() 
         
-        # text box with objective
-        self.task_text = tk.Label(self.root, text="What's the day of the week for the following date?")
-        self.task_text.config(font=("Arial", 12))
-        self.task_text.place(relx=0.5, y=40, anchor=tk.CENTER)
+        # shows text with objective
+        task = "What's the day of the week for the following date?"
+        self.date_text = ShowText(self.root, '', task, 14, 0.5, 45)
 
         # shows date to guess
         self.date_text = ShowText(self.root, "day - month - year", self.date_to_guess.date_string, 15, 0.5, 150)
 
+        # shows guesses per session
         self.guess_count = 0
-        self.counter_text = ShowText(self.root, "guesses", self.guess_count, 15, 0.9, 40)
+        self.counter_text = ShowText(self.root, "guesses", self.guess_count, 15, 0.92, 40)
 
         # list for labeling buttons
         days_of_week=['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday']
@@ -118,34 +122,39 @@ class DoomsdayAlgorithm():
         #buttons
         y=300
         button_width = 85
+        # caculates the x position of the first button so all buttons are centered
         x=(x_size-7*button_width)/2+button_width/2
         
-        day_number=0
+        day_number = 0 # value of each day needed for buttons 
 
         self.list_of_buttons = [] # list to store buttons
         for day in days_of_week:
+            # add buttons to list 
             self.list_of_buttons.append(tk.Button(self.root, text=day, image=pixelVirtual, width=button_width-10, height=30, compound="c", bg='#d9d9d9', command=lambda i=day_number: self.button_hit(i)))
 
+            # specifies the position of the buttons
             self.list_of_buttons[day_number].place(x=x, y=y, anchor=tk.CENTER)
 
-            x+=85
+            x+=85 # shift x position for next button
             day_number+=1
         self.root.mainloop()
 
     def button_hit(self, guess):
         # color of button indicates result
         self.button_coloring(guess)
+
+        # gets the time it took for the user to make the guess
+        self.time = self.timer.total_time() 
         
-        self.time = self.timer.total_time()
-        
+        # saves results to file 
         self.saver.add_result(self.date_to_guess.random_date, self.date_to_guess.day_of_week, guess, self.time)
 
+        # increase and update guess counter
         self.guess_count+=1
         self.counter_text.update_text(self.guess_count)
 
-        # new date
+        # creates new date an updates display
         self.date_to_guess.create_random_date()
-        #self.date.set(self.date_to_guess.date_string)
         self.date_text.update_text(self.date_to_guess.date_string)
 
     def button_coloring(self, guess):
