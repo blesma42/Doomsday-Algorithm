@@ -60,6 +60,24 @@ class ResultSaver():
             file.write(f'{self.index}, {self.session}, {date}, {day_of_week}, {guess}, {time}\n')
         self.index += 1
 
+class ShowText():
+    def __init__(self, root, string1, string2, fontsize, pos_x, pos_y): 
+        self.text = tk.Label(root, text=string1)
+        self.text.config(font=("Arial", fontsize-6))
+        self.text.place(relx=pos_x, y=pos_y+20, anchor=tk.CENTER)
+
+        # text which changes during running
+        self.dynamic_text_var = tk.StringVar()
+        self.dynamic_text_var.set(string2)
+
+        # textbox with labaling for date
+        self.dynamic_text = tk.Label(root, textvariable=self.dynamic_text_var)
+        self.dynamic_text.config(font=("Arial", fontsize))
+        self.dynamic_text.place(relx=pos_x, y=pos_y, anchor=tk.CENTER)
+
+    def update_text(self, new_text):
+        self.dynamic_text_var.set(new_text)
+
 class DoomsdayAlgorithm():
     def __init__(self):
         # window settings
@@ -85,31 +103,11 @@ class DoomsdayAlgorithm():
         self.task_text.config(font=("Arial", 12))
         self.task_text.place(relx=0.5, y=40, anchor=tk.CENTER)
 
-        # textbox to display date
-        self.index_text = tk.Label(self.root, text="day - month - year")
-        self.index_text.config(font=("Arial", 10))
-        self.index_text.place(relx=0.5, y=180, anchor=tk.CENTER)
-        # variable field for updating when new date is created
-        self.date = tk.StringVar()
-        self.date.set(self.date_to_guess.date_string)
+        # shows date to guess
+        self.date_text = ShowText(self.root, "day - month - year", self.date_to_guess.date_string, 15, 0.5, 150)
 
-        # textbox with labaling for date
-        self.date_text = tk.Label(self.root, textvariable=self.date)
-        self.date_text.config(font=("Arial", 15))
-        self.date_text.place(relx=0.5, y=150, anchor=tk.CENTER)
-
-        # textbox to display guess counter
-        self.guess_counter_label = tk.Label(self.root, text="guesses")
-        self.guess_counter_label.config(font=("Arial", 10))
-        self.guess_counter_label.place(x=650, y=50, anchor=tk.CENTER)
-        # variable field for updating when new date is created
         self.guess_count = 0
-        self.guess_counter = tk.StringVar()
-        self.guess_counter.set(self.guess_count)
-
-        self.guess_counter_text = tk.Label(self.root, textvariable=self.guess_counter)
-        self.guess_counter_text.config(font=("Arial", 15))
-        self.guess_counter_text.place(x=650, y=30, anchor=tk.CENTER)
+        self.counter_text = ShowText(self.root, "guesses", self.guess_count, 15, 0.9, 40)
 
         # list for labeling buttons
         days_of_week=['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday']
@@ -142,11 +140,13 @@ class DoomsdayAlgorithm():
         
         self.saver.add_result(self.date_to_guess.random_date, self.date_to_guess.day_of_week, guess, self.time)
 
-        self.update_guess_counter()
+        self.guess_count+=1
+        self.counter_text.update_text(self.guess_count)
 
         # new date
         self.date_to_guess.create_random_date()
-        self.date.set(self.date_to_guess.date_string)
+        #self.date.set(self.date_to_guess.date_string)
+        self.date_text.update_text(self.date_to_guess.date_string)
 
     def button_coloring(self, guess):
         # coulering buttons based on results
@@ -154,9 +154,5 @@ class DoomsdayAlgorithm():
             button.configure(bg='#d9d9d9') # gray for all buttons
         self.list_of_buttons[guess].configure(bg='#ff4d4d') # red for wrong button
         self.list_of_buttons[self.date_to_guess.day_of_week].configure(bg='#99ff66') # green for correct button
-    
-    def update_guess_counter(self):
-        self.guess_count+=1
-        self.guess_counter.set(self.guess_count)
 
 app = DoomsdayAlgorithm()
