@@ -19,7 +19,7 @@ class RandomDate:
         #creates an random date between lowest_date and highest_date
         self.random_date = self.lowest_date+timedelta(days=random.randint(0, (self.highest_date-self.lowest_date).days))
         self.date_string = self.random_date.strftime("%d - %m - %Y")
-        self.day_of_week = self.random_date.weekday() #0=Monday, 1=Tuesday, ..., 6=Sunday 
+        self.day_of_week = self.random_date.isoweekday()%7 # 0=Sunday, 1=Monday, ... 
 
 class Timer():
     def __init__(self):
@@ -41,7 +41,7 @@ class ResultSaver():
         file_exists = os.path.exists(self.filename)
         if not file_exists:
             with open(self.filename, 'w') as file:
-                file.write('index, session, date, day_of_week, guess, time\n') #adding header
+                file.write('index, session, date_to_guess, day_of_week, guess, time\n') #adding header
 
         else:
             try:
@@ -50,14 +50,14 @@ class ResultSaver():
                 with open(self.filename, 'r') as file:
                     last_line = file.readlines()[-1]
                 values = last_line.split(sep=', ')
-                self.session = int(values[0])+1
-                self.index = int(values[1])+1
+                self.session = int(values[1])+1
+                self.index = int(values[0])+1
             except ValueError:
                 pass
 
-    def add_result(self, date, day_of_week, guess, time):
+    def add_result(self, date_to_guess, day_of_week, guess, time):
         with open(self.filename, 'a') as file:
-            file.write(f'{self.index}, {self.session}, {date}, {day_of_week}, {guess}, {time}\n')
+            file.write(f'{self.index}, {self.session}, {date_to_guess}, {day_of_week}, {guess}, {time}\n')
         self.index += 1
 
 class ShowText():
@@ -114,7 +114,7 @@ class DoomsdayAlgorithm():
         self.counter_text = ShowText(self.root, "guesses", self.guess_count, 15, 0.92, 40)
 
         # list for labeling buttons
-        days_of_week=['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday']
+        days_of_week=['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday']
 
         #fake imagae to enable size by pixel
         pixelVirtual = tk.PhotoImage(width=1, height=1)
