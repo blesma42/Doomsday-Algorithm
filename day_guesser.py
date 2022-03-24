@@ -6,7 +6,7 @@ import time
 import os
 
 class RandomDate:
-    # creates a random date between some limits 
+    '''creates a random date between some limits, and also determinates the day of the week for the date.''' 
     def __init__(self):
         #difference between lowest date and today is the same as distance between oday and highest date
         self.lowest_date = date(1582, 10, 15) #before this date the Julian calender was used instead of the Gregorian
@@ -22,6 +22,7 @@ class RandomDate:
         self.day_of_week = self.random_date.isoweekday()%7 # 0=Sunday, 1=Monday, ... 
 
 class Timer():
+    '''Simple timer, starts when first called and returns the time passed in seconds since the last call.'''
     def __init__(self):
         self.start_time = time.time()
     
@@ -32,6 +33,7 @@ class Timer():
         return self.time_difference
 
 class ResultSaver():
+    '''Creates an .csv file if not existent, and saves results from the gusss to the file'''
     def __init__(self):
 
         self.session = 1
@@ -41,23 +43,22 @@ class ResultSaver():
         file_exists = os.path.exists(self.filename)
         if not file_exists:
             with open(self.filename, 'w') as file:
-                file.write('index, session, date_to_guess, day_of_week, guess, time\n') #adding header
-
+                file.write('index,session,date_of_session,date_to_guess,day_of_week,guess,time\n') #adding header
         else:
             try:
                 # creates an error if programm is opend on the secound time,
                 # when it was closed on the first time without a first guess.
                 with open(self.filename, 'r') as file:
                     last_line = file.readlines()[-1]
-                values = last_line.split(sep=', ')
+                values = last_line.split(sep=',')
                 self.session = int(values[1])+1
                 self.index = int(values[0])+1
             except ValueError:
                 pass
 
-    def add_result(self, date_to_guess, day_of_week, guess, time):
+    def add_result(self, date_of_session, date_to_guess, day_of_week, guess, time):
         with open(self.filename, 'a') as file:
-            file.write(f'{self.index}, {self.session}, {date_to_guess}, {day_of_week}, {guess}, {time}\n')
+            file.write(f'{self.index},{self.session},{date_of_session},{date_to_guess},{day_of_week},{guess},{time}\n')
         self.index += 1
 
 class ShowText():
@@ -82,6 +83,8 @@ class ShowText():
         self.dynamic_text_var.set(new_text)
 
 class DoomsdayAlgorithm():
+    '''GUI for traning the doomsday alghorithm.
+    Shows date, session counter, and buttons to select the day of the week.'''
     def __init__(self):
         # window size
         x_size = 700
@@ -147,7 +150,7 @@ class DoomsdayAlgorithm():
         self.time = self.timer.total_time() 
         
         # saves results to file 
-        self.saver.add_result(self.date_to_guess.random_date, self.date_to_guess.day_of_week, guess, self.time)
+        self.saver.add_result(self.date_to_guess.current_date, self.date_to_guess.random_date, self.date_to_guess.day_of_week, guess, self.time)
 
         # increase and update guess counter
         self.guess_count+=1
@@ -164,4 +167,5 @@ class DoomsdayAlgorithm():
         self.list_of_buttons[guess].configure(bg='#ff4d4d') # red for wrong button
         self.list_of_buttons[self.date_to_guess.day_of_week].configure(bg='#99ff66') # green for correct button
 
-app = DoomsdayAlgorithm()
+if __name__=='__main__':
+    app = DoomsdayAlgorithm()
