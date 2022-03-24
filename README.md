@@ -104,3 +104,5 @@ It also creates a file (if not existing) where it stores the number of guess, se
 |[README.md](README.md)|Project Description|
 |[day_guesser.py](day_guesser.py)|Programm to train the Doomsday Algorithm|
 |[GUI.PNG](GUI.PNG)|Image of the GUI|
+|[Doomsday.csv](Doomsday.csv)|Contains the results from the guesses|
+|[Analysis.ipynb](Analysis.ipynb)|Contains the analysis of the results (Doomsday.csv)|
